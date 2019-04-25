@@ -1,0 +1,125 @@
+@mixin tablet {
+    @media all and (min-width: 800px){
+      @content;
+    }
+  }
+  @mixin desktop {
+    @media all and (min-width: 1400px){
+      @content;
+    }
+  }
+
+  $desktopContent-width: 90%;
+
+* {box-sizing: border-box;}
+
+body{
+    margin: 0;
+    padding: 0;
+    // background-image: url(../../layout/500.jpg);
+    // // background-position: center;
+    // background-repeat: no-repeat;
+    // background-size: contain;
+}
+
+.header{
+    width: 100vw;
+    .header__top{
+        background: #424413;
+        width: 100vw;
+        height: 150px;
+        margin: 0 auto 2vw;
+        @include desktop{
+            width: $desktopContent-width;
+        }
+    }
+    .header__bg{
+        width: 100%;
+    }
+}
+
+.firstSection{
+    width: 92vw;
+    margin: 4vw auto;
+    @include desktop{
+        width: $desktopContent-width;
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    &__greenBox{
+        width: 100%;
+        height: 92vw;
+        background: green;
+        @include desktop{
+            width: 48%;
+        }
+    }
+    &__threeBox{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        @include desktop{
+            width: 48%;
+        }
+        .threeBox__item{
+            background: #18a1ab;
+            color: #fff;
+            width: 100%;
+            margin: 4vw 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @include tablet{
+                width: 48%;
+            }
+            @include desktop{
+                width: 100%;
+            }
+            &__text{
+                font-size: 1.2rem;
+                padding: 50px;
+            }
+            &:first-child{
+                @include desktop{
+                    margin-top: 0;
+                }
+            }
+            &:last-child{
+                    @include tablet{
+                        width: 100%;
+                    }
+            }
+        }
+    }
+}
+
+.secondSection{
+    background: #a51b35;
+    width: 100%;
+    height: 20vh;
+}
+
+.thirdSection{
+    
+    &__box{
+        width: 92vw;
+        height: 40vh;
+        background: #21a110;
+        margin: 4vw auto;
+        @include desktop{
+            width: $desktopContent-width;
+        }
+    }
+}
+
+.fourthSection{
+    width: 100%;
+    height: 75vw;
+    background: #afb608;
+}
+
+.footer{
+    height: 100vw;;
+}
