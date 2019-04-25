@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #results{
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+
+<div kitty-pics></div>
+
+<script>
+class PictsComponent {
+  constructor(root) {
+    this._root = root;
+    this._elements = {};
+  }
+
+  attach() {
+    this._renderTemplate();
+    this._elements = {
+      results: this._root.querySelector('#results'),
+      show: this._root.querySelector('button'),
+    };
+
+    this._clickButton();
+  }
+
+  async showPict() {
+    const items = await this._fetchData();
+    this._renderItems(items);
+  }
+
+  async _fetchData() {
+    const apiKey = "J48TzsWk2xM4oxZBBd7gry7Jv9ysnHKN";
+    let offset = Math.floor(Math.random() * 10);
+    const url = "http://api.giphy.com/v1/gifs/search?q=cat&api_key="+apiKey+"&limit=1&offset="+offset;
+    const response = await (await fetch(url)).json();
+    return this._parseContent(response);
+  }
+
+  _parseContent(apiResponse) {
+    return apiResponse.data.map(item => {
+      const thumbnail = item.images.original.url;
+      return {thumbnail};
+    })
+  }
+
+  _renderItems(items) {
+    const template = document.createElement('template');
+    items.forEach(i => {
+      template.innerHTML = `
+        <div class="pict">
+          <img src="${i.thumbnail}">
+        </div>
+      `;
+      this._elements.results.append(template.content);
+    });
+  }
+
+  _renderTemplate() {
+    this._root.innerHTML = `
+      <header>
+        <h1>Panda Group random kitty</h1>
+        <button>Just one more cat!</button>
+      </header>
+      <main id="results"></main>
+    `;
+  }
+
+  _clickButton() {
+    this._elements.show.addEventListener('click', debounce(() => {
+      this.showPict();
+    }, 500));
+  }
+
+}
+
+function debounce(cb, time) {
+  let timeout = null;
+  return function (...args) {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(cb.bind(this, ...args), time);
+  }
+}
+
+const root = document.querySelector('[kitty-pics]');
+const pictures = new PictsComponent(root);
+
+pictures.attach();
+
+</script>
+</body>
+</html>
